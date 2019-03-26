@@ -3,6 +3,7 @@ package wa.LibraRepo;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -10,6 +11,14 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import org.openqa.selenium.TakesScreenshot;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class LibraRepo {
 
@@ -60,13 +69,12 @@ public class LibraRepo {
 		//driverオプションの設定
 		if(driver_type.equals("firefox")) {
 			FirefoxOptions fxopt = new FirefoxOptions();
-			//fxopt.addArguments("-window-size=1280,900");
 			if(headless_flag.equals("yes")) fxopt.addArguments("-headless");
 			wd = new FirefoxDriver(fxopt);
 		} else if(driver_type.equals("chrome")) {
 			ChromeOptions chopt = new ChromeOptions();
 			//chopt.addArguments("--disable-xss-auditor");
-			//chopt.addArguments("--window-size=1280,900");
+			chopt.addArguments("--window-size=1280,900");
 			if(headless_flag.equals("yes")) chopt.addArguments("--headless");
 			wd = new ChromeDriver(chopt);
 		}
@@ -74,6 +82,15 @@ public class LibraRepo {
 		wd.manage().timeouts().implicitlyWait(systemWait, TimeUnit.SECONDS);
 		wd.get(app_url);
 		
+	}
+	
+	//スクリーンショットを取る
+	public void screenshot(String filename) throws Exception {
+		TakesScreenshot sc = (TakesScreenshot)wd;
+		Path save_dir = Paths.get("screenshots");
+		Files.createDirectories(save_dir);
+		Path save_path = save_dir.resolve(filename);
+		Files.write(save_path, sc.getScreenshotAs(OutputType.BYTES));
 	}
 	
 	//シャットダウン
