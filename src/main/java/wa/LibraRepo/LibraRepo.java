@@ -1,5 +1,6 @@
 package wa.LibraRepo;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -96,6 +97,36 @@ public class LibraRepo {
 	//シャットダウン
 	public void shutdown() {
 		wd.quit();
+	}
+	
+	//ログイン
+	public void login() {
+		wd.findElement(By.id("uid")).sendKeys(uid);
+		wd.findElement(By.id("pswd")).sendKeys(pswd);
+		wd.findElement(By.id("btn")).click();
+	}
+	
+	//ログアウト
+	public void logout() {
+		/*
+		WebElement menuWrap = wd.findElement(By.id("hMenu"));
+		WebElement menuBase = menuWrap.findElement(By.className("headerMenu"));
+		List<WebElement> menuLists = menuBase.findElements(By.tagName("li"));
+		for(int i=0; i<menuLists.size(); i++) {
+			WebElement  menuLI = menuLists.get(i);
+			WebElement menuA = menuLI.findElement(By.tagName("a"));
+			String menuA_value = menuA.getText();
+			if(menuA_value.equals("検査中サイト一覧")) {
+				menuA.click();
+				break;
+			}
+		}
+		*/
+		WebElement btnWrap = wd.findElement(By.id("btn"));
+		WebElement btnBase = btnWrap.findElement(By.tagName("ul"));
+		WebElement btnBaseInner = btnBase.findElement(By.className("btn2"));
+		WebElement btnA = btnBaseInner.findElement(By.tagName("a"));
+		btnA.click();
 	}
 	
 }
