@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -34,6 +35,7 @@ public class LibraRepo {
 	private String uid;
 	private String pswd;
 	private String app_url = "https://accessibility.jp/libra/";
+	private String index_url = "https://jis.infocreate.co.jp/";
 	private String rep_index_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/report/projID/";
 	private String rep_detail_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/report2/projID/";
 	private String sv_mainpage_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/index/projID/";
@@ -74,15 +76,19 @@ public class LibraRepo {
 			wd = new FirefoxDriver(fxopt);
 		} else if(driver_type.equals("chrome")) {
 			ChromeOptions chopt = new ChromeOptions();
-			//chopt.addArguments("--disable-xss-auditor");
-			chopt.addArguments("--window-size=1280,900");
 			if(headless_flag.equals("yes")) chopt.addArguments("--headless");
 			wd = new ChromeDriver(chopt);
 		}
 		
 		wd.manage().timeouts().implicitlyWait(systemWait, TimeUnit.SECONDS);
+		wd.manage().window().setSize(new Dimension(1280, 900));
 		wd.get(app_url);
 		
+	}
+	
+	//WebDriverのゲッター
+	public WebDriver getWd() {
+		return wd;
 	}
 	
 	//スクリーンショットを取る
@@ -108,20 +114,9 @@ public class LibraRepo {
 	
 	//ログアウト
 	public void logout() {
-		/*
-		WebElement menuWrap = wd.findElement(By.id("hMenu"));
-		WebElement menuBase = menuWrap.findElement(By.className("headerMenu"));
-		List<WebElement> menuLists = menuBase.findElements(By.tagName("li"));
-		for(int i=0; i<menuLists.size(); i++) {
-			WebElement  menuLI = menuLists.get(i);
-			WebElement menuA = menuLI.findElement(By.tagName("a"));
-			String menuA_value = menuA.getText();
-			if(menuA_value.equals("検査中サイト一覧")) {
-				menuA.click();
-				break;
-			}
-		}
-		*/
+		wd.get(index_url);
+		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+		//try { screenshot("louout-check-chrome.png"); } catch (Exception e) {}
 		WebElement btnWrap = wd.findElement(By.id("btn"));
 		WebElement btnBase = btnWrap.findElement(By.tagName("ul"));
 		WebElement btnBaseInner = btnBase.findElement(By.className("btn2"));

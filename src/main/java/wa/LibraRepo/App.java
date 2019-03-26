@@ -31,6 +31,9 @@ public class App
         lrp.login();
 		try { Thread.sleep(6000); } catch(InterruptedException e) {}
 		try { lrp.screenshot("firefox-login.png"); } catch(Exception e) {}
+		lrp.getWd().get("https://jis.infocreate.co.jp/diagnose/result/index/projID/503");
+		try { lrp.screenshot("chrome-repo.png"); } catch(Exception e) {}
+		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		lrp.logout();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		lrp.shutdown();
