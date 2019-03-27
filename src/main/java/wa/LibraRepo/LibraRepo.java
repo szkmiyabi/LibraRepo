@@ -2,6 +2,8 @@ package wa.LibraRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -158,8 +160,8 @@ public class LibraRepo {
 		return doc;
 	}
 	
-	//URL一覧データ生成
-	public List<String> get_page_list_data() {
+	//PID一覧データ生成
+	public List<String> get_page_list_data_single() {
 		List<String> datas = new ArrayList<String>();
 		org.jsoup.nodes.Document dom = get_dom();
 		org.jsoup.nodes.Element tbl = null;
@@ -176,6 +178,41 @@ public class LibraRepo {
 		for(org.jsoup.nodes.Element row : rows) {
 			String td_val = row.text();
 			datas.add(td_val);
+		}
+		return datas;
+	}
+	
+	//PID一覧＋URL一覧データ生成
+	public Map<String, String> get_page_list_data() {
+		Map<String, String> datas = new TreeMap<String, String>();
+		org.jsoup.nodes.Document dom = get_dom();
+		org.jsoup.nodes.Element tbl = null;
+		org.jsoup.select.Elements tbls = dom.select("table");
+		for(int i=0; i<tbls.size(); i++) {
+			if(i == 2) {
+				tbl = (org.jsoup.nodes.Element)tbls.get(i);
+			}
+		}
+		int row_cnt = 0;
+		String tbl_html = tbl.outerHtml();
+		org.jsoup.nodes.Document tbl_dom = Jsoup.parse(tbl_html);
+
+		org.jsoup.select.Elements rows = tbl_dom.select("tr td:first-child");
+		List<String> pids = new ArrayList<String>();
+		for(org.jsoup.nodes.Element row : rows) {
+			String td_val = row.text();
+			pids.add(td_val);
+		}
+		int map_cnt = pids.size();
+		rows = null;
+		rows = tbl_dom.select("tr td:nth-child(2)");
+		List<String> urls = new ArrayList<String>();
+		for(org.jsoup.nodes.Element row : rows) {
+			String td_val = row.text();
+			urls.add(td_val);
+		}
+		for(int i=0; i<map_cnt; i++) {
+			datas.put(pids.get(i), urls.get(i));
 		}
 		return datas;
 	}

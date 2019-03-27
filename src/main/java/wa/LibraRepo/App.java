@@ -1,6 +1,7 @@
 package wa.LibraRepo;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,9 +54,16 @@ public class App
 			}
 			cnt++;
 		}*/
+		/*
 		List<String> rows = lrp.get_page_list_data();
 		for(String row : rows) {
 			System.out.println(row);
+		}
+		*/
+		Map<String, String> rows = lrp.get_page_list_data();
+		for(Map.Entry<String, String> row : rows.entrySet()) {
+			System.out.println(row.getKey());
+			System.out.println(row.getValue());
 		}
 		
 		
