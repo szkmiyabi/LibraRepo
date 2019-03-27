@@ -42,9 +42,9 @@ public class App
 		lrp.browse_repo();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
-		org.jsoup.nodes.Document doc = lrp.get_dom();
+		//org.jsoup.nodes.Document doc = lrp.get_dom();
 		//System.out.println(doc.html());
-		
+		/*
 		org.jsoup.select.Elements elms = doc.select("table");
 		int cnt = 0;
 		for(org.jsoup.nodes.Element elm : elms) {
@@ -52,10 +52,14 @@ public class App
 				System.out.println(elm.html());
 			}
 			cnt++;
+		}*/
+		List<String> rows = lrp.get_page_list_data();
+		for(String row : rows) {
+			System.out.println(row);
 		}
 		
 		
-		
+		/*
 		List<String> rows = LibraRepoFiles.open_text_data("guideline_datas.txt");
 		for(int i=0; i<rows.size(); i++) {
 			String row = rows.get(i);
@@ -65,6 +69,7 @@ public class App
 			try { Thread.sleep(3000); } catch(InterruptedException e) {}
 			try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
 		}
+		*/
 
 		lrp.logout();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}

@@ -1,5 +1,6 @@
 package wa.LibraRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -155,6 +156,28 @@ public class LibraRepo {
 		String html_str = wd.getPageSource();
 		org.jsoup.nodes.Document doc = Jsoup.parse(html_str);
 		return doc;
+	}
+	
+	//URL一覧データ生成
+	public List<String> get_page_list_data() {
+		List<String> datas = new ArrayList<String>();
+		org.jsoup.nodes.Document dom = get_dom();
+		org.jsoup.nodes.Element tbl = null;
+		org.jsoup.select.Elements tbls = dom.select("table");
+		for(int i=0; i<tbls.size(); i++) {
+			if(i == 2) {
+				tbl = (org.jsoup.nodes.Element)tbls.get(i);
+			}
+		}
+		int row_cnt = 0;
+		String tbl_html = tbl.outerHtml();
+		org.jsoup.nodes.Document tbl_dom = Jsoup.parse(tbl_html);
+		org.jsoup.select.Elements rows = tbl_dom.select("tr td:first-child");
+		for(org.jsoup.nodes.Element row : rows) {
+			String td_val = row.text();
+			datas.add(td_val);
+		}
+		return datas;
 	}
 	
 	
