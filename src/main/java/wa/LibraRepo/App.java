@@ -1,5 +1,6 @@
 package wa.LibraRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,42 +44,26 @@ public class App
 		lrp.browse_repo();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
-		//org.jsoup.nodes.Document doc = lrp.get_dom();
-		//System.out.println(doc.html());
 		/*
-		org.jsoup.select.Elements elms = doc.select("table");
-		int cnt = 0;
-		for(org.jsoup.nodes.Element elm : elms) {
-			if(cnt==2) {
-				System.out.println(elm.html());
-			}
-			cnt++;
-		}*/
-		/*
-		List<String> rows = lrp.get_page_list_data();
-		for(String row : rows) {
-			System.out.println(row);
-		}
-		*/
 		Map<String, String> rows = lrp.get_page_list_data();
 		for(Map.Entry<String, String> row : rows.entrySet()) {
 			System.out.println(row.getKey());
 			System.out.println(row.getValue());
 		}
-		
-		
-		/*
-		List<String> rows = LibraRepoFiles.open_text_data("guideline_datas.txt");
-		for(int i=0; i<rows.size(); i++) {
-			String row = rows.get(i);
-			String crurl = lrp.fetch_report_detail_path("wake0001", row);
-			System.out.println(crurl);
-			lrp.getWd().get(crurl);
-			try { Thread.sleep(3000); } catch(InterruptedException e) {}
-			try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
-		}
 		*/
-
+		String testurl = "http://jis.infocreate.co.jp/diagnose/indexv2/report2/projID/503/controlID/wake0001/guideline/7.1.1.1/";
+		lrp.getWd().get(testurl);
+		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+		List<List<String>> rows = lrp.get_detail_table_data("wake0001", "https://www.town.wake.lg.jp/", "7.1.1.1");
+		for(int i=0; i<rows.size(); i++) {
+			List<String> row = rows.get(i);
+			for(String col : row) {
+				System.out.print(col + "\t");
+			}
+			System.out.println("");
+		}
+		
 		lrp.logout();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		lrp.shutdown();

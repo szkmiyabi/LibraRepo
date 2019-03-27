@@ -217,5 +217,48 @@ public class LibraRepo {
 		return datas;
 	}
 	
+	//レポート詳細ページから検査結果データを生成
+	List<List<String>> get_detail_table_data(String pageID, String pageURL, String guideline) {
+		List<List<String>> datas = new ArrayList<List<String>>();
+		org.jsoup.nodes.Document dom = get_dom();
+		org.jsoup.nodes.Element tbl = null;
+		org.jsoup.select.Elements tbls = dom.select("table");
+		for(int i=0; i<tbls.size(); i++) {
+			if(i == 2) {
+				tbl = (org.jsoup.nodes.Element)tbls.get(i);
+			}
+		}
+		String tbl_html = tbl.outerHtml();
+		org.jsoup.nodes.Document tbl_dom = Jsoup.parse(tbl_html);
+		org.jsoup.select.Elements trs = tbl_dom.select("tr");
+		for(int i=0; i<trs.size(); i++) {
+			if(i == 0) continue;
+			List<String> row_datas = new ArrayList<String>();
+			row_datas.add(pageID);
+			row_datas.add(pageURL);
+			row_datas.add(guideline);
+			
+			org.jsoup.nodes.Element tr = (org.jsoup.nodes.Element)trs.get(i);
+			String tr_html = tr.outerHtml();
+			
+			//jsoupはtrだけをparseすると独自DOM構造になるため手動整形
+			tr_html = "<html><head><meta charset='utf8'></head><body><table><tr>" + tr_html + "</tr></table></body></html>";
+
+			org.jsoup.nodes.Document tr_dom = Jsoup.parse(tr_html);
+			org.jsoup.select.Elements tds = tr_dom.select("td");
+			for(int j=0; j<tds.size(); j++) {
+				org.jsoup.nodes.Element td = (org.jsoup.nodes.Element)tds.get(j);
+				String td_val = td.html();
+				if(td_val.equals("")) {
+					row_datas.add("");
+				} else {
+					row_datas.add(td_val);
+				}
+			}
+			datas.add(row_datas);
+		}
+		return datas;
+	}
+	
 	
 }
