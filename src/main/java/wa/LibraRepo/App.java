@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 
 /**
@@ -41,7 +43,17 @@ public class App
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
 		org.jsoup.nodes.Document doc = lrp.get_dom();
-		System.out.println(doc.html());
+		//System.out.println(doc.html());
+		
+		org.jsoup.select.Elements elms = doc.select("table");
+		int cnt = 0;
+		for(org.jsoup.nodes.Element elm : elms) {
+			if(cnt==2) {
+				System.out.println(elm.html());
+			}
+			cnt++;
+		}
+		
 		
 		
 		List<String> rows = LibraRepoFiles.open_text_data("guideline_datas.txt");
