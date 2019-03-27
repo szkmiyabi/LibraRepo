@@ -84,12 +84,14 @@ public class LibraRepo {
 		wd.manage().window().setSize(new Dimension(1280, 900));
 		
 		//Test code
+		/*
 		System.out.println(LibraRepoDateUtil.fetch_filename_from_datetime("txt"));
 		List<String> tmp = LibraRepoFiles.open_text_data("guideline_datas.txt");
 		for(int i=0; i<tmp.size(); i++) {
 			String row = tmp.get(i);
 			System.out.println(row);
 		}
+		*/
 		
 		wd.get(app_url);
 		
@@ -132,5 +134,16 @@ public class LibraRepo {
 		WebElement btnA = btnBaseInner.findElement(By.tagName("a"));
 		btnA.click();
 	}
+	
+	//レポートインデックスページに遷移
+	public void browse_repo() {
+		wd.get(rep_index_url_base + projectID);
+	}
+	
+	//レポート詳細ページのURL生成
+	public String fetch_report_detail_path(String pageID, String guidelineID) {
+		return rep_detail_url_base + projectID + "/controlID/"  + pageID + "/guideline/" + guidelineID + "/";
+	}
+	
 	
 }

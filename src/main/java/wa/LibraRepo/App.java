@@ -25,12 +25,23 @@ public class App
     	int[] appWait = {systemWait, longWait, midWait, shortWait};
     	
         LibraRepo lrp = new LibraRepo(uid, pswd, projectID, appWait, os, driver_type, headless_flag);
+		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+
         lrp.login();
-		try { Thread.sleep(6000); } catch(InterruptedException e) {}
-		try { lrp.screenshot("firefox-login.png"); } catch(Exception e) {}
-		lrp.getWd().get("https://jis.infocreate.co.jp/diagnose/result/index/projID/503");
-		try { lrp.screenshot("chrome-repo.png"); } catch(Exception e) {}
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+
+		lrp.browse_repo();
+		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+		
+		String test = lrp.fetch_report_detail_path("wake0001", "7.1.3.1");
+		System.out.println(test);
+		lrp.getWd().get(test);
+		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+
+		
 		lrp.logout();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		lrp.shutdown();
