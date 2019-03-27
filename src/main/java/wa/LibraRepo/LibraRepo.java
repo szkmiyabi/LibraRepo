@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -16,19 +20,12 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import org.openqa.selenium.TakesScreenshot;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 
 public class LibraRepo {
 
@@ -39,7 +36,6 @@ public class LibraRepo {
 	private int midWait;
 	private int shortWait;
 	private String driver_path;
-	private Boolean headless_flag;
 	private String uid;
 	private String pswd;
 	private String app_url = "https://accessibility.jp/libra/";
@@ -58,7 +54,6 @@ public class LibraRepo {
 		longWait = appWait[1];
 		midWait = appWait[2];
 		shortWait = appWait[3];
-		
 		//driverパスの設定
 		if(os.equals("windows")) {
 			if(driver_type.equals("firefox")) {
@@ -77,7 +72,6 @@ public class LibraRepo {
 				System.setProperty("webdriver.chrome.driver", driver_path);
 			}
 		}
-		
 		//driverオプションの設定
 		if(driver_type.equals("firefox")) {
 			FirefoxOptions fxopt = new FirefoxOptions();
@@ -88,20 +82,8 @@ public class LibraRepo {
 			if(headless_flag.equals("yes")) chopt.addArguments("--headless");
 			wd = new ChromeDriver(chopt);
 		}
-		
 		wd.manage().timeouts().implicitlyWait(systemWait, TimeUnit.SECONDS);
 		wd.manage().window().setSize(new Dimension(1280, 900));
-		
-		//Test code
-		/*
-		System.out.println(LibraRepoDateUtil.fetch_filename_from_datetime("txt"));
-		List<String> tmp = LibraRepoFiles.open_text_data("guideline_datas.txt");
-		for(int i=0; i<tmp.size(); i++) {
-			String row = tmp.get(i);
-			System.out.println(row);
-		}
-		*/
-		
 		wd.get(app_url);
 		
 	}
@@ -136,7 +118,6 @@ public class LibraRepo {
 	public void logout() {
 		wd.get(index_url);
 		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
-		//try { screenshot("louout-check-chrome.png"); } catch (Exception e) {}
 		WebElement btnWrap = wd.findElement(By.id("btn"));
 		WebElement btnBase = btnWrap.findElement(By.tagName("ul"));
 		WebElement btnBaseInner = btnBase.findElement(By.className("btn2"));
@@ -289,17 +270,6 @@ public class LibraRepo {
 		
 		LibraRepoExcel.save_xlsx(rep_data);
 		
-		/*
-		for(int i=0; i<rep_data.size(); i++) {
-			List<String> row = rep_data.get(i);
-			for(String col : row) {
-				System.out.print(col + "\t");
-			}
-			System.out.println("");
-		}
-		*/
-		
 	}
-	
 	
 }
