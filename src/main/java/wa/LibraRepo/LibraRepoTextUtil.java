@@ -16,7 +16,7 @@ public class LibraRepoTextUtil {
 	
 	//brタグを改行コード変換
 	private static String br_decode(String str) {
-		return Pattern.compile("<br>").matcher(str).replaceAll("\n");
+		return Pattern.compile("<br>").matcher(str).replaceAll("\r\n");
 	}
 	
 	//タグをデコード
