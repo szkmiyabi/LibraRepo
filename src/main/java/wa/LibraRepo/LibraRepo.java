@@ -82,7 +82,15 @@ public class LibraRepo {
 		
 		wd.manage().timeouts().implicitlyWait(systemWait, TimeUnit.SECONDS);
 		wd.manage().window().setSize(new Dimension(1280, 900));
+		
+		//Test code
 		System.out.println(LibraRepoDateUtil.fetch_filename_from_datetime("txt"));
+		List<String> tmp = LibraRepoFiles.open_text_data("guideline_datas.txt");
+		for(int i=0; i<tmp.size(); i++) {
+			String row = tmp.get(i);
+			System.out.println(row);
+		}
+		
 		wd.get(app_url);
 		
 	}

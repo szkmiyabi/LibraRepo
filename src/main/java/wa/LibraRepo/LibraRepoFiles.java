@@ -14,10 +14,8 @@ import org.yaml.snakeyaml.Yaml;
 
 public class LibraRepoFiles {
 
-	/*-----------------------------------------------
-	 * Yamlファイルの読み込み
-	 *----------------------------------------------*/
-	private InputStream readYamlFile(String fileName) {
+	//Yamlファイルの読み込み
+	private static InputStream readYamlFile(String fileName) {
 		InputStream is = null;
 		try
 		{
@@ -27,10 +25,8 @@ public class LibraRepoFiles {
 		return is;
 	}
 	
-	/*-----------------------------------------------
-	 * 設定データファイルの読み込み
-	 *----------------------------------------------*/
-	public String[] getUserProperties(String fileName) {
+	//設定データファイルの読み込み
+	public static String[] getUserProperties(String fileName) {
 		String[] ret = new String[9];
 		Yaml yaml = new Yaml();
 		Map<String, Object> data = (Map<String, Object>) yaml.loadAs(readYamlFile(fileName), Map.class);
@@ -40,6 +36,25 @@ public class LibraRepoFiles {
 			else ret[i] = String.valueOf(entry.getValue());
 			i++;
 		}
+		return ret;
+	}
+	
+	//テキストデータを配列として読み込み
+	public static List<String> open_text_data(String filename) {
+		List<String> ret = new ArrayList<String>();
+		try {
+			FileInputStream is = new FileInputStream(filename);
+			InputStreamReader in = new InputStreamReader(is, "UTF-8");
+			BufferedReader br = new BufferedReader(in);
+			String line = "";
+			while((line = br.readLine()) != null) {
+				ret.add(line);
+			}
+			br.close();
+			is.close();
+
+		} catch(Exception ex) {}
+
 		return ret;
 	}
 

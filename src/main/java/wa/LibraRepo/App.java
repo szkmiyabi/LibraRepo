@@ -1,7 +1,5 @@
 package wa.LibraRepo;
 
-import wa.LibraRepo.LibraRepo;
-
 /**
  * Hello world!
  *
@@ -13,8 +11,7 @@ public class App
     	// Test code
     	String projectID = "503";
     	
-    	LibraRepoFiles fo = new LibraRepoFiles();
-        String[] user_data = fo.getUserProperties("user.yaml");
+        String[] user_data = LibraRepoFiles.getUserProperties("user.yaml");
         String uid = user_data[0];
         String pswd = user_data[1];
         int systemWait = Integer.parseInt(user_data[2]);
