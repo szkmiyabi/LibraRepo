@@ -263,6 +263,12 @@ public class LibraRepo {
 	//レポートデータ生成
 	public void fetch_report_sequential() {
 		List<List<String>> rep_data = new ArrayList<List<String>>();
+		//header
+		rep_data.add(LibraRepoTextUtil.get_header());
+		
+		//debug cout
+		int cnt = 0;
+		
 		wd.get(rep_index_url_base + projectID + "/");
 		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
 		
@@ -273,6 +279,7 @@ public class LibraRepo {
 			String guideline = guideline_rows.get(i);
 			//pageのループ
 			for(Map.Entry<String, String> page_row : page_rows.entrySet()) {
+				if(cnt > 2) continue;
 				String pageID = page_row.getKey();
 				String pageURL = page_row.getValue();
 				System.out.println(pageID + ", " + guideline + " を処理しています。 ");
@@ -282,7 +289,9 @@ public class LibraRepo {
 				
 				List<List<String>> tbl_data = get_detail_table_data(pageID, pageURL, guideline);
 				rep_data.addAll(tbl_data);
+				cnt++;
 			}
+			cnt = 0;
 		}
 		
 		for(int i=0; i<rep_data.size(); i++) {
