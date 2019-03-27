@@ -50,7 +50,7 @@ public class App
 			System.out.println(row.getKey());
 			System.out.println(row.getValue());
 		}
-		*/
+		
 		String testurl = "http://jis.infocreate.co.jp/diagnose/indexv2/report2/projID/503/controlID/wake0001/guideline/7.1.1.1/";
 		lrp.getWd().get(testurl);
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
@@ -63,6 +63,8 @@ public class App
 			}
 			System.out.println("");
 		}
+		*/
+		lrp.fetch_report_sequential();
 		
 		lrp.logout();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}

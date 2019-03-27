@@ -47,6 +47,7 @@ public class LibraRepo {
 	private String rep_index_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/report/projID/";
 	private String rep_detail_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/report2/projID/";
 	private String sv_mainpage_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/index/projID/";
+	private String guideline_file_name = "guideline_datas.txt";
 	
 	//コンストラクタ
 	public LibraRepo(String uid, String pswd,  String projectID, int[] appWait,  String os, String driver_type, String headless_flag) {
@@ -257,6 +258,41 @@ public class LibraRepo {
 			datas.add(row_datas);
 		}
 		return datas;
+	}
+	
+	//レポートデータ生成
+	public void fetch_report_sequential() {
+		List<List<String>> rep_data = new ArrayList<List<String>>();
+		wd.get(rep_index_url_base + projectID + "/");
+		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+		
+		List<String> guideline_rows = LibraRepoFiles.open_text_data(guideline_file_name);
+		Map<String, String> page_rows = get_page_list_data();
+		//guidelineのループ
+		for(int i=0; i<guideline_rows.size(); i++) {
+			String guideline = guideline_rows.get(i);
+			//pageのループ
+			for(Map.Entry<String, String> page_row : page_rows.entrySet()) {
+				String pageID = page_row.getKey();
+				String pageURL = page_row.getValue();
+				System.out.println(pageID + ", " + guideline + " を処理しています。 ");
+				String path = fetch_report_detail_path(pageID, guideline);
+				wd.get(path);
+				try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+				
+				List<List<String>> tbl_data = get_detail_table_data(pageID, pageURL, guideline);
+				rep_data.addAll(tbl_data);
+			}
+		}
+		
+		for(int i=0; i<rep_data.size(); i++) {
+			List<String> row = rep_data.get(i);
+			for(String col : row) {
+				System.out.print(col + "\t");
+			}
+			System.out.println("");
+		}
+		
 	}
 	
 	
