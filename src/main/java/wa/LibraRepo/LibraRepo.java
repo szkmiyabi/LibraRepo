@@ -21,6 +21,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 
 public class LibraRepo {
 
@@ -143,6 +146,13 @@ public class LibraRepo {
 	//レポート詳細ページのURL生成
 	public String fetch_report_detail_path(String pageID, String guidelineID) {
 		return rep_detail_url_base + projectID + "/controlID/"  + pageID + "/guideline/" + guidelineID + "/";
+	}
+	
+	//DOMオブジェクトを取得
+	public org.jsoup.nodes.Document get_dom() {
+		String html_str = wd.getPageSource();
+		org.jsoup.nodes.Document doc = Jsoup.parse(html_str);
+		return doc;
 	}
 	
 	

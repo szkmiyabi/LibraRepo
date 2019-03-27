@@ -2,6 +2,10 @@ package wa.LibraRepo;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+
 /**
  * Hello world!
  *
@@ -36,6 +40,9 @@ public class App
 		lrp.browse_repo();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+		org.jsoup.nodes.Document doc = lrp.get_dom();
+		System.out.println(doc.html());
+		
 		
 		List<String> rows = LibraRepoFiles.open_text_data("guideline_datas.txt");
 		for(int i=0; i<rows.size(); i++) {
