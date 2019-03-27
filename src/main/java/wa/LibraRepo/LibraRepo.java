@@ -237,18 +237,17 @@ public class LibraRepo {
 			row_datas.add(pageID);
 			row_datas.add(pageURL);
 			row_datas.add(guideline);
-			
 			org.jsoup.nodes.Element tr = (org.jsoup.nodes.Element)trs.get(i);
 			String tr_html = tr.outerHtml();
-			
-			//jsoupはtrだけをparseすると独自DOM構造になるため手動整形
+			//Jsoupパースバグの解消
 			tr_html = "<html><head><meta charset='utf8'></head><body><table><tr>" + tr_html + "</tr></table></body></html>";
-
 			org.jsoup.nodes.Document tr_dom = Jsoup.parse(tr_html);
 			org.jsoup.select.Elements tds = tr_dom.select("td");
 			for(int j=0; j<tds.size(); j++) {
 				org.jsoup.nodes.Element td = (org.jsoup.nodes.Element)tds.get(j);
 				String td_val = td.html();
+				//文字実体参照をデコード
+				td_val = LibraRepoTextUtil.src_decode(td_val);
 				if(td_val.equals("")) {
 					row_datas.add("");
 				} else {
