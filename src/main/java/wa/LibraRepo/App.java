@@ -1,5 +1,7 @@
 package wa.LibraRepo;
 
+import java.util.List;
+
 /**
  * Hello world!
  *
@@ -35,13 +37,16 @@ public class App
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
 		
-		String test = lrp.fetch_report_detail_path("wake0001", "7.1.3.1");
-		System.out.println(test);
-		lrp.getWd().get(test);
-		try { Thread.sleep(3000); } catch(InterruptedException e) {}
-		try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+		List<String> rows = LibraRepoFiles.open_text_data("guideline_datas.txt");
+		for(int i=0; i<rows.size(); i++) {
+			String row = rows.get(i);
+			String crurl = lrp.fetch_report_detail_path("wake0001", row);
+			System.out.println(crurl);
+			lrp.getWd().get(crurl);
+			try { Thread.sleep(3000); } catch(InterruptedException e) {}
+			try { lrp.screenshot(LibraRepoDateUtil.fetch_filename_from_datetime("png")); } catch(Exception e) {}
+		}
 
-		
 		lrp.logout();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 		lrp.shutdown();
