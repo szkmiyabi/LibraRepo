@@ -82,6 +82,7 @@ public class LibraRepo {
 		
 		wd.manage().timeouts().implicitlyWait(systemWait, TimeUnit.SECONDS);
 		wd.manage().window().setSize(new Dimension(1280, 900));
+		System.out.println(LibraRepoDateUtil.fetch_filename_from_datetime("txt"));
 		wd.get(app_url);
 		
 	}
