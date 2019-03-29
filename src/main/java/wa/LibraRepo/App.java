@@ -48,8 +48,14 @@ public class App
     		
     		//report処理
     		if(!projectID.equals("")) {
-    			LibraRepoMain.exec(projectID, any_pageID, any_guideline);
-    			
+    			if(LibraRepoTextUtil.is_projectID(projectID)) {
+        			System.out.println("処理を開始します。(" + LibraRepoDateUtil.get_logtime() + ")");
+        			LibraRepoMain.do_report(projectID, any_pageID, any_guideline);
+        			System.out.println("処理を完了します。(" + LibraRepoDateUtil.get_logtime() + ")");
+    			} else {
+    				System.out.println("不正なプロジェクトIDが指定されました。処理を中止します。");
+    			}
+
     		} else {
     			
     			//help処理
@@ -61,6 +67,8 @@ public class App
     				System.out.println("ガイドラインデータリセット処理が実行される...予定");
     			}
     		}
+    	} else {
+    		System.out.println("コマンドライン引数が指定されていないため処理を開始できません。");
     	}
     	
     }

@@ -3,7 +3,7 @@ package wa.LibraRepo;
 public class LibraRepoMain {
 	
 	//検査結果レポートメイン処理
-	public static void exec(String projectID, String any_pageID, String any_guideline) {
+	public static void do_report(String projectID, String any_pageID, String any_guideline) {
     	
 		//設定ファイルの読み込み
         String[] user_data = LibraRepoFiles.getUserProperties("user.yaml");
@@ -28,7 +28,16 @@ public class LibraRepoMain {
 		lrp.browse_repo();
 		try { Thread.sleep(3000); } catch(InterruptedException e) {}
 
-		lrp.fetch_report_sequential();
+		//条件分岐
+		if(any_pageID == "" && any_guideline == "") {
+			//全レポート処理
+			lrp.fetch_report_sequential();
+			
+		} else {
+			//範囲指定レポート処理
+			lrp.fetch_report_single(any_pageID, any_guideline);
+			
+		}
 		
 		//ログアウト
 		lrp.logout();

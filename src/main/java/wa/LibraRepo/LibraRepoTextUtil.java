@@ -34,6 +34,14 @@ public class LibraRepoTextUtil {
 		if(mt.find()) return true;
 		else return false;
 	}
+	
+	//カンマ区切りテキストかどうか判定
+	public static Boolean is_csv(String str) {
+		Pattern pt = Pattern.compile(",");
+		Matcher mt = pt.matcher(str);
+		if(mt.find()) return true;
+		else return false;
+	}
 
 	//レポートのヘッダー行を生成
 	public static List<String> get_header() {

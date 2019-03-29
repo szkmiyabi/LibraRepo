@@ -142,28 +142,6 @@ public class LibraRepo {
 		return doc;
 	}
 	
-	//PID一覧データ生成
-	public List<String> get_page_list_data_single() {
-		List<String> datas = new ArrayList<String>();
-		org.jsoup.nodes.Document dom = get_dom();
-		org.jsoup.nodes.Element tbl = null;
-		org.jsoup.select.Elements tbls = dom.select("table");
-		for(int i=0; i<tbls.size(); i++) {
-			if(i == 2) {
-				tbl = (org.jsoup.nodes.Element)tbls.get(i);
-			}
-		}
-		int row_cnt = 0;
-		String tbl_html = tbl.outerHtml();
-		org.jsoup.nodes.Document tbl_dom = Jsoup.parse(tbl_html);
-		org.jsoup.select.Elements rows = tbl_dom.select("tr td:first-child");
-		for(org.jsoup.nodes.Element row : rows) {
-			String td_val = row.text();
-			datas.add(td_val);
-		}
-		return datas;
-	}
-	
 	//PID一覧＋URL一覧データ生成
 	public Map<String, String> get_page_list_data() {
 		Map<String, String> datas = new TreeMap<String, String>();
@@ -176,9 +154,6 @@ public class LibraRepo {
 			}
 		}
 
-		//debug
-		int cnt = 0;
-		
 		String tbl_html = tbl.outerHtml();
 		org.jsoup.nodes.Document tbl_dom = Jsoup.parse(tbl_html);
 
@@ -197,13 +172,7 @@ public class LibraRepo {
 			urls.add(td_val);
 		}
 		for(int i=0; i<map_cnt; i++) {
-			//debug
-			if(cnt == 3) break;
-			
 			datas.put(pids.get(i), urls.get(i));
-			
-			//debug
-			cnt++;
 		}
 		return datas;
 	}
@@ -267,7 +236,7 @@ public class LibraRepo {
 			for(Map.Entry<String, String> page_row : page_rows.entrySet()) {
 				String pageID = page_row.getKey();
 				String pageURL = page_row.getValue();
-				System.out.println(pageID + ", " + guideline + " を処理しています。 ");
+				System.out.println(pageID + ", " + guideline + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
 				String path = fetch_report_detail_path(pageID, guideline);
 				wd.get(path);
 				try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
@@ -279,7 +248,86 @@ public class LibraRepo {
 		
 		System.out.println("Excel書き出し処理に移ります。(" + LibraRepoDateUtil.get_logtime() + ")");
 		LibraRepoExcel.save_xlsx(rep_data);
+		System.out.println("Excel書き出し処理が完了しました。(" + LibraRepoDateUtil.get_logtime() + ")");
 		
+	}
+	
+	//ページIDとガイドラインIDを個別に指定してレポートデータ作成
+	public void fetch_report_single(String any_pageID, String any_guideline) {
+		List<List<String>> rep_data = new ArrayList<List<String>>();
+		wd.get(rep_index_url_base + projectID + "/");
+		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+		
+		//処理対象PIDデータの処理
+		List<String> qy_page_rows = new ArrayList<String>();
+		Map<String, String> new_page_rows = new TreeMap<String, String>();
+		Map<String, String> page_rows = get_page_list_data();
+		if(any_pageID == "") {
+			new_page_rows = page_rows;
+		} else {
+			//ループ用PIDマップの生成
+			if(LibraRepoTextUtil.is_csv(any_pageID)) {
+				String[] tmp_arr = any_pageID.split(",", 0);
+				for(int i=0; i<tmp_arr.length; i++) {
+					qy_page_rows.add(tmp_arr[i]);
+				}
+			} else {
+				qy_page_rows.add(any_pageID);
+			}
+			for(int i=0; i<qy_page_rows.size(); i++) {
+				String tmp_pid = qy_page_rows.get(i);
+				for(Map.Entry<String, String> tmp_row : page_rows.entrySet()) {
+					String key = tmp_row.getKey();
+					String val = tmp_row.getValue();
+					if(tmp_pid.equals(key)) {
+						new_page_rows.put(key, val);
+					}
+				}
+			}
+			if(new_page_rows.isEmpty()) {
+				System.out.println("-p オプションで指定したPIDが存在しません。処理を停止します。");
+				return;
+			}
+		}
+		
+		//処理対象ガイドラインデータの処理
+		List<String> guideline_rows = new ArrayList<String>();
+		if(any_guideline == "") {
+			guideline_rows = LibraRepoFiles.open_text_data(guideline_file_name);
+		} else {
+			if(LibraRepoTextUtil.is_csv(any_guideline)) {
+				String[] tmp_arr = any_guideline.split(",", 0);
+				for(int i=0; i<tmp_arr.length; i++) {
+					guideline_rows.add(tmp_arr[i]);
+				}
+			} else {
+				guideline_rows.add(any_guideline);
+			}
+		}
+
+		//header
+		rep_data.add(LibraRepoTextUtil.get_header());
+
+		//guidelineのループ
+		for(int i=0; i<guideline_rows.size(); i++) {			
+			String guideline = guideline_rows.get(i);
+			//pageのループ
+			for(Map.Entry<String, String> page_row : new_page_rows.entrySet()) {
+				String pageID = page_row.getKey();
+				String pageURL = page_row.getValue();
+				System.out.println(pageID + ", " + guideline + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
+				String path = fetch_report_detail_path(pageID, guideline);
+				wd.get(path);
+				try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+				
+				List<List<String>> tbl_data = get_detail_table_data(pageID, pageURL, guideline);
+				rep_data.addAll(tbl_data);
+			}
+		}
+		
+		System.out.println("Excel書き出し処理に移ります。(" + LibraRepoDateUtil.get_logtime() + ")");
+		LibraRepoExcel.save_xlsx(rep_data);
+		System.out.println("Excel書き出し処理が完了しました。(" + LibraRepoDateUtil.get_logtime() + ")");
 	}
 	
 }
