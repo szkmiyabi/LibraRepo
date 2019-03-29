@@ -175,7 +175,10 @@ public class LibraRepo {
 				tbl = (org.jsoup.nodes.Element)tbls.get(i);
 			}
 		}
-		int row_cnt = 0;
+
+		//debug
+		int cnt = 0;
+		
 		String tbl_html = tbl.outerHtml();
 		org.jsoup.nodes.Document tbl_dom = Jsoup.parse(tbl_html);
 
@@ -194,7 +197,13 @@ public class LibraRepo {
 			urls.add(td_val);
 		}
 		for(int i=0; i<map_cnt; i++) {
+			//debug
+			if(cnt == 3) break;
+			
 			datas.put(pids.get(i), urls.get(i));
+			
+			//debug
+			cnt++;
 		}
 		return datas;
 	}
@@ -252,7 +261,7 @@ public class LibraRepo {
 		List<String> guideline_rows = LibraRepoFiles.open_text_data(guideline_file_name);
 		Map<String, String> page_rows = get_page_list_data();
 		//guidelineのループ
-		for(int i=0; i<guideline_rows.size(); i++) {
+		for(int i=0; i<guideline_rows.size(); i++) {			
 			String guideline = guideline_rows.get(i);
 			//pageのループ
 			for(Map.Entry<String, String> page_row : page_rows.entrySet()) {
@@ -268,6 +277,7 @@ public class LibraRepo {
 			}
 		}
 		
+		System.out.println("Excel書き出し処理に移ります。(" + LibraRepoDateUtil.get_logtime() + ")");
 		LibraRepoExcel.save_xlsx(rep_data);
 		
 	}
