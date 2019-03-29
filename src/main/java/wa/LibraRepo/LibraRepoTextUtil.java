@@ -26,6 +26,14 @@ public class LibraRepoTextUtil {
 		data = Pattern.compile("&gt;").matcher(data).replaceAll(">");
 		return data;
 	}
+	
+	//プロジェクトIDかどうか判定
+	public static Boolean is_projectID(String str) {
+		Pattern pt = Pattern.compile("[0-9]+");
+		Matcher mt = pt.matcher(str);
+		if(mt.find()) return true;
+		else return false;
+	}
 
 	//レポートのヘッダー行を生成
 	public static List<String> get_header() {
