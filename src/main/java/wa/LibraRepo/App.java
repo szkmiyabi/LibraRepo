@@ -40,7 +40,6 @@ public class App
     	}
     	
     	if(projectID.equals("") && any_pageID.equals("") && any_guideline.equals("") && !reset_guideline_flag && !show_help_flag) {
-    		//System.out.println("コマンドライン引数が指定されていません");
     		args_flag = false;
     	}
     	
@@ -64,7 +63,7 @@ public class App
     				
     			//guidelineデータリセット処理
     			} else if(reset_guideline_flag) {
-    				System.out.println("ガイドラインデータリセット処理が実行される...予定");
+    				LibraRepoMain.do_reset_guideline();
     			}
     		}
     	} else {

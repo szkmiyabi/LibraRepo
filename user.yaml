@@ -7,3 +7,4 @@ shortWait: 3000
 os: windows
 driver: chrome
 headless: "yes"
+guidelineLevel: AA
