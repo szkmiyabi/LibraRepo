@@ -68,7 +68,7 @@ public class LibraRepoExcel {
 			s_ok2.setBorderLeft(BorderStyle.THIN);
 			s_ok2.setBorderRight(BorderStyle.THIN);
 			s_ok2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-			s_ok2.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIME.getIndex());
+			s_ok2.setFillForegroundColor(HSSFColor.HSSFColorPredefined.BRIGHT_GREEN.getIndex());
 			
 			//不適合スタイル
 			CellStyle s_fail = wb.createCellStyle();
