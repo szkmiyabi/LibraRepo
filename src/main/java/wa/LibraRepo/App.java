@@ -59,7 +59,7 @@ public class App
     			
     			//help処理
     			if(show_help_flag) {
-    				System.out.println("ヘルプが実行される...予定");
+    				LibraRepoFiles.write_help();
     				
     			//guidelineデータリセット処理
     			} else if(reset_guideline_flag) {
