@@ -20,4 +20,12 @@ public class LibraRepoDateUtil {
 		return ld.format(dtf_log);
 	}
 	
+	//アプリのスリープ
+	public static void app_sleep(int second) {
+		try {
+			int milisec = second * 1000;
+			Thread.sleep(milisec);
+		} catch(InterruptedException e) {
+		}
+	}
 }

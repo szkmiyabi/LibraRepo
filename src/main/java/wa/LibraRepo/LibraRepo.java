@@ -225,7 +225,7 @@ public class LibraRepo {
 		//header
 		rep_data.add(LibraRepoTextUtil.get_header());
 		wd.get(rep_index_url_base + projectID + "/");
-		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+		LibraRepoDateUtil.app_sleep(shortWait);
 		
 		List<String> guideline_rows = LibraRepoFiles.open_text_data(guideline_file_name);
 		Map<String, String> page_rows = get_page_list_data();
@@ -239,8 +239,8 @@ public class LibraRepo {
 				System.out.println(pageID + ", " + guideline + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
 				String path = fetch_report_detail_path(pageID, guideline);
 				wd.get(path);
-				try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
-				
+				LibraRepoDateUtil.app_sleep(shortWait);
+
 				List<List<String>> tbl_data = get_detail_table_data(pageID, pageURL, guideline);
 				rep_data.addAll(tbl_data);
 			}
@@ -256,7 +256,7 @@ public class LibraRepo {
 	public void fetch_report_single(String any_pageID, String any_guideline) {
 		List<List<String>> rep_data = new ArrayList<List<String>>();
 		wd.get(rep_index_url_base + projectID + "/");
-		try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+		LibraRepoDateUtil.app_sleep(shortWait);
 		
 		//処理対象PIDデータの処理
 		List<String> qy_page_rows = new ArrayList<String>();
@@ -318,7 +318,7 @@ public class LibraRepo {
 				System.out.println(pageID + ", " + guideline + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
 				String path = fetch_report_detail_path(pageID, guideline);
 				wd.get(path);
-				try { Thread.sleep(shortWait); } catch(InterruptedException e) {}
+				LibraRepoDateUtil.app_sleep(shortWait);
 				
 				List<List<String>> tbl_data = get_detail_table_data(pageID, pageURL, guideline);
 				rep_data.addAll(tbl_data);

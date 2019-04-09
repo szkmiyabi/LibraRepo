@@ -26,10 +26,11 @@ public class LibraRepoMain {
 		
 		//ログイン
 		lrp.login();
-		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		LibraRepoDateUtil.app_sleep(shortWait);
+
 		//レポートindexページ
 		lrp.browse_repo();
-		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		LibraRepoDateUtil.app_sleep(shortWait);
 		
 		//条件分岐
 		if(any_pageID == "" && any_guideline == "") {
@@ -44,7 +45,7 @@ public class LibraRepoMain {
 
 		//ログアウト
 		lrp.logout();
-		try { Thread.sleep(3000); } catch(InterruptedException e) {}
+		LibraRepoDateUtil.app_sleep(shortWait);
 		lrp.shutdown();
 	
 	}
