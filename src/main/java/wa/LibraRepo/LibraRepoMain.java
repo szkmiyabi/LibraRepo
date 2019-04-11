@@ -2,6 +2,7 @@ package wa.LibraRepo;
 
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
+import java.util.List;
 
 public class LibraRepoMain {
 	
@@ -47,7 +48,12 @@ public class LibraRepoMain {
 		lrp.logout();
 		LibraRepoDateUtil.app_sleep(shortWait);
 		lrp.shutdown();
-	
+		
+		List<List<String>> rep_data = lrp.getRepData();
+		System.out.println("Excel書き出し処理に移ります。(" + LibraRepoDateUtil.get_logtime() + ")");
+		LibraRepoExcel.save_xlsx(rep_data);
+		System.out.println("Excel書き出し処理が完了しました。(" + LibraRepoDateUtil.get_logtime() + ")");
+		
 	}
 	
 	//guidelineデータを初期化

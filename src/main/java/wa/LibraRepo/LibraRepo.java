@@ -44,6 +44,7 @@ public class LibraRepo {
 	private String rep_detail_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/report2/projID/";
 	private String sv_mainpage_url_base = "http://jis.infocreate.co.jp/diagnose/indexv2/index/projID/";
 	private String guideline_file_name = "guideline_datas.txt";
+	private List<List<String>> rep_data;
 	
 	//コンストラクタ
 	public LibraRepo(String uid, String pswd,  String projectID, int[] appWait,  String os, String driver_type, String headless_flag) {
@@ -54,6 +55,10 @@ public class LibraRepo {
 		longWait = appWait[1];
 		midWait = appWait[2];
 		shortWait = appWait[3];
+		
+		//レポートデータ初期化
+		rep_data = new ArrayList<List<String>>();
+		
 		//driverパスの設定
 		if(os.equals("windows")) {
 			if(driver_type.equals("firefox")) {
@@ -91,6 +96,11 @@ public class LibraRepo {
 	//WebDriverのゲッター
 	public WebDriver getWd() {
 		return wd;
+	}
+	
+	//rep_dataのゲッター
+	public List<List<String>> getRepData() {
+		return rep_data;
 	}
 	
 	//スクリーンショットを取る
@@ -221,7 +231,7 @@ public class LibraRepo {
 	
 	//レポートデータ生成
 	public void fetch_report_sequential() {
-		List<List<String>> rep_data = new ArrayList<List<String>>();
+
 		//header
 		rep_data.add(LibraRepoTextUtil.get_header());
 		wd.get(rep_index_url_base + projectID + "/");
@@ -246,15 +256,11 @@ public class LibraRepo {
 			}
 		}
 		
-		System.out.println("Excel書き出し処理に移ります。(" + LibraRepoDateUtil.get_logtime() + ")");
-		LibraRepoExcel.save_xlsx(rep_data);
-		System.out.println("Excel書き出し処理が完了しました。(" + LibraRepoDateUtil.get_logtime() + ")");
-		
 	}
 	
 	//ページIDとガイドラインIDを個別に指定してレポートデータ作成
 	public void fetch_report_single(String any_pageID, String any_guideline) {
-		List<List<String>> rep_data = new ArrayList<List<String>>();
+
 		wd.get(rep_index_url_base + projectID + "/");
 		LibraRepoDateUtil.app_sleep(shortWait);
 		
@@ -324,10 +330,7 @@ public class LibraRepo {
 				rep_data.addAll(tbl_data);
 			}
 		}
-		
-		System.out.println("Excel書き出し処理に移ります。(" + LibraRepoDateUtil.get_logtime() + ")");
-		LibraRepoExcel.save_xlsx(rep_data);
-		System.out.println("Excel書き出し処理が完了しました。(" + LibraRepoDateUtil.get_logtime() + ")");
+
 	}
 	
 }
