@@ -213,16 +213,24 @@ public class LibraRepo {
 			tr_html = "<html><head><meta charset='utf8'></head><body><table><tr>" + tr_html + "</tr></table></body></html>";
 			org.jsoup.nodes.Document tr_dom = Jsoup.parse(tr_html);
 			org.jsoup.select.Elements tds = tr_dom.select("td");
+			int col_num = 0;
 			for(int j=0; j<tds.size(); j++) {
 				org.jsoup.nodes.Element td = (org.jsoup.nodes.Element)tds.get(j);
 				String td_val = td.html();
-				//文字実体参照をデコード
-				td_val = LibraRepoTextUtil.src_decode(td_val);
+				//コメント列はbrタグも含め実体参照デコード
+				if(col_num == 4) {
+					td_val = LibraRepoTextUtil.br_decode(td_val);
+					td_val = LibraRepoTextUtil.tag_decode(td_val);
+				//それ以外は、実体参照のみデコード
+				} else {
+					td_val = LibraRepoTextUtil.tag_decode(td_val);
+				}
 				if(td_val.equals("")) {
 					row_datas.add("");
 				} else {
 					row_datas.add(td_val);
 				}
+				col_num++;
 			}
 			datas.add(row_datas);
 		}
