@@ -27,6 +27,17 @@ import java.util.ArrayList;
 
 
 public class LibraRepoExcel {
+	
+	//最大文字数32767に収める
+	public static String fetch_overflow_characters(String data) {
+		if(data.length() >= 32767) {
+			String prefix = "【注意】セルに入力可能な文字数の上限を超えました。32767文字以降は切り捨てられます。\n\n";
+			int prefix_cnt = prefix.length() + 1;
+			return prefix + data.substring(0, (32767 - prefix_cnt));
+		} else {
+			return data;
+		}
+	}
 
 	//Excelファイルに出力
 	public static void save_xlsx(List<List<String>> datas) {
@@ -97,12 +108,38 @@ public class LibraRepoExcel {
 
 			int sv_index = 5;
 			
+			double row_max = (double)datas.size();
+			Boolean perc25 = true;
+			Boolean perc50 = true;
+			Boolean perc75 = true;
+			Boolean perc99 = true;
 			
 			for(int i=0; i<datas.size(); i++) {
 				List<String> data_rows = datas.get(i);
 				row = sh.createRow(i);
+				
+				//進捗状況の表示
+				double counter = (double)(i + 1) / row_max;
+				if(counter >= 0.25 && perc25) {
+					System.out.println("...25%完了");
+					perc25 = false;
+				} else if(counter >= 0.5 && perc50) {
+					System.out.println("...50%完了");
+					perc50 = false;
+				} else if(counter >= 0.75 && perc75) {
+					System.out.println("...75%完了");
+					perc75 = false;
+				} else if(counter >= 0.99 && perc99) {
+					System.out.println("...99%完了");
+					perc99 = false;
+				}
+				
 				for(int j=0; j<data_rows.size(); j++) {
 					String col = data_rows.get(j);
+					
+					//32767文字を超える文字列処理
+					col = fetch_overflow_characters(col);
+					
 					cell = row.createCell(j);
 					cell.setCellValue(col);
 					
@@ -131,7 +168,8 @@ public class LibraRepoExcel {
 			wb.write(sw);
 			
 		} catch(Exception e) {
-			
+			//Errorメッセージ
+			System.out.println("Runtime Error: \n" + e.getMessage());
 		} finally {
 			if(sw != null) {
 				try { sw.close(); } catch(Exception e) {}
