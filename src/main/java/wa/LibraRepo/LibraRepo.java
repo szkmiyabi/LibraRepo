@@ -250,11 +250,14 @@ public class LibraRepo {
 		//guidelineのループ
 		for(int i=0; i<guideline_rows.size(); i++) {			
 			String guideline = guideline_rows.get(i);
+			String guideline_disp = guideline; //println用
+			//jis2016以前の達成基準番号に変換
+			if(!LibraRepoTextUtil.is_jis2016_lower(guideline)) guideline = "7." + guideline;
 			//pageのループ
 			for(Map.Entry<String, String> page_row : page_rows.entrySet()) {
 				String pageID = page_row.getKey();
 				String pageURL = page_row.getValue();
-				System.out.println(pageID + ", " + guideline + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
+				System.out.println(pageID + ", " + guideline_disp + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
 				String path = fetch_report_detail_path(pageID, guideline);
 				wd.get(path);
 				LibraRepoDateUtil.app_sleep(shortWait);
@@ -325,11 +328,14 @@ public class LibraRepo {
 		//guidelineのループ
 		for(int i=0; i<guideline_rows.size(); i++) {			
 			String guideline = guideline_rows.get(i);
+			String guideline_disp = guideline; //println用
+			//jis2016以前の達成基準番号に変換
+			if(!LibraRepoTextUtil.is_jis2016_lower(guideline)) guideline = "7." + guideline;
 			//pageのループ
 			for(Map.Entry<String, String> page_row : new_page_rows.entrySet()) {
 				String pageID = page_row.getKey();
 				String pageURL = page_row.getValue();
-				System.out.println(pageID + ", " + guideline + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
+				System.out.println(pageID + ", " + guideline_disp + " を処理しています。 (" + LibraRepoDateUtil.get_logtime() + ")");
 				String path = fetch_report_detail_path(pageID, guideline);
 				wd.get(path);
 				LibraRepoDateUtil.app_sleep(shortWait);

@@ -51,4 +51,20 @@ public class LibraRepoTextUtil {
 		return head_row;
 	}
 	
+	//達成基準番号をJIS2016形式に変換
+	public static String jis2016_encode(String str) {
+		String data = str;
+		data = Pattern.compile("^7\\.").matcher(data).replaceAll("");
+		return data;
+	}
+	
+	//達成基準番号をJIS2016以前の形式かどうか判定
+	public static boolean is_jis2016_lower(String str) {
+		String data = "";
+		Pattern pt = Pattern.compile("^7\\.");
+		Matcher mt = pt.matcher(str);
+		if(mt.find()) return true;
+		else return false;
+	}
+	
 }

@@ -39,6 +39,7 @@ public class LibraRepoExcel {
 		}
 	}
 
+
 	//Excelファイルに出力
 	public static void save_xlsx(List<List<String>> datas) {
 		SXSSFWorkbook wb = null;
@@ -139,6 +140,11 @@ public class LibraRepoExcel {
 					
 					//32767文字を超える文字列処理
 					col = fetch_overflow_characters(col);
+					
+					//達成基準番号をJIS2016形式に変換
+					if(i > 0 && j == 2) {
+						col = LibraRepoTextUtil.jis2016_encode(col);
+					}
 					
 					cell = row.createCell(j);
 					cell.setCellValue(col);
